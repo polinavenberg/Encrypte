@@ -1,10 +1,16 @@
 import collections
+from globals import Globals
 
 
 def caesar_cipher(input_txt, output_txt, step):
-    """Функция, создающая шифр Цезаря. На вход функции подается название файла, в котором лежит текст,
-    который должна зашифровать функция; название файла, в котором будет лежать зашифрованный текст и число,
-    являющееся шагом шифрования"""
+    '''
+    Функция, создающая шифр Цезаря.
+    :param input_txt: название файла, в котором лежит текст, который должна
+    зашифровать функция
+    :param output_txt: название файла, в котором будет лежать зашифрованный
+    текст
+    :param step: число, являющееся шагом шифрования
+    '''
 
     text = open(input_txt, 'r')
     code = open(output_txt, 'w')
@@ -13,15 +19,14 @@ def caesar_cipher(input_txt, output_txt, step):
     working_line = ''
     code_list = []
 
-    a = 'abcdefghijklmnopqrstuvwxyz'
-
     for line in text_list:
         line = line.lower()
         for l in line:
-            if l not in a:
+            if l not in Globals.a:
                 working_line += l
             else:
-                working_line += a[(a.find(l) + step) % len(a)]
+                working_line += Globals.a[
+                    (Globals.a.find(l) + step) % len(Globals.a)]
         code_list.append(working_line)
         working_line = ''
     for line in code_list:
@@ -32,9 +37,13 @@ def caesar_cipher(input_txt, output_txt, step):
 
 
 def de_caesar_cipher(input_txt, output_txt, step):
-    """Функция, расшифровывающая шифр Цезаря. На вход функции подается название файла, в котором лежит зашифрованный текст,
-    который должна расшифровать функция; название файла, в котором будет лежать расшифрованный текст и число,
-    являющееся шагом шифрования """
+    '''
+    Функция, расшифровывающая шифр Цезаря.
+    :param input_txt: название файла, в котором лежит зашифрованный текст
+    :param output_txt: название файла, в котором будет лежать расшифрованный
+    текст
+    :param step: число, являющееся шагом шифрования
+    '''
 
     code = open(input_txt, 'r')
     text = open(output_txt, 'w')
@@ -43,15 +52,14 @@ def de_caesar_cipher(input_txt, output_txt, step):
     working_line = ''
     text_list = []
 
-    a = 'abcdefghijklmnopqrstuvwxyz'
-
     for line in code_list:
         line = line.lower()
         for l in line:
-            if l not in a:
+            if l not in Globals.a:
                 working_line += l
             else:
-                working_line += a[(a.find(l) - step) % len(a)]
+                working_line += Globals.a[
+                    (Globals.a.find(l) - step) % len(Globals.a)]
         text_list.append(working_line)
         working_line = ''
     for line in text_list:
@@ -62,9 +70,13 @@ def de_caesar_cipher(input_txt, output_txt, step):
 
 
 def caesar_analysys(input_txt, output_txt):
-    """Фуекция, которая взламывает шифр Цезар методом анализа частоты вхождений букв англиского алфавита
-    в зашифрованный текст. На вход программе подается название файла, в котором лежит зашифрованный текст и
-    название файла, в котором будет лежать взломанный текст. Функция не работает для коротких текстов."""
+    '''
+    Фуекция, которая взламывает шифр Цезар методом анализа частоты вхождений
+    букв английского алфавита в зашифрованный текст. Функция не работает для
+    коротких текстов.
+    :param input_txt: название файла, в котором лежит зашифрованный текст
+    :param output_txt: название файла, в котором будет лежать взломанный текст
+    '''
 
     code = open(input_txt, 'r')
 
@@ -72,26 +84,30 @@ def caesar_analysys(input_txt, output_txt):
 
     all_letters = ''
 
-    a = 'abcdefghijklmnopqrstuvwxyz'
-
     for line in code_list:
         line = line.lower()
         for l in line:
-            if l in a:
+            if l in Globals.a:
                 all_letters += l
 
     most_common_element = collections.Counter(all_letters).most_common(1)[0][0]
-    # e - буква английского алфавита, которая встречается в тексте чаще всех остальных
-    key = a.find(most_common_element) - a.find('e')
+    key = Globals.a.find(most_common_element) - Globals.a.find(
+        Globals.most_common_letter)
 
     code.close()
     return de_caesar_cipher(input_txt, output_txt, key)
 
 
 def vegenere_cipher(input_txt, output_txt, k):
-    """Функция, создающая шифр Виженера. На вход функции подается название файла, в котором лежит текст,
-    который должна зашифровать функция; название файла, в котором будет лежать зашифрованный текст и слово,
-    являющееся ключом шифрования"""
+    '''
+    Функция, создающая шифр Виженера.
+    :param input_txt: название файла, в котором лежит текст, который должна
+    зашифровать функция
+    :param output_txt: название файла, в котором будет лежать зашифрованный
+    текст
+    :param k: слово, являющееся ключом шифрования
+    :return:
+    '''
 
     text = open(input_txt, 'r')
     code = open(output_txt, 'w')
@@ -100,8 +116,6 @@ def vegenere_cipher(input_txt, output_txt, k):
     working_line = ''
     code_list = []
     all_str = ''
-
-    a = 'abcdefghijklmnopqrstuvwxyz'
 
     k = k.lower()
 
@@ -115,21 +129,23 @@ def vegenere_cipher(input_txt, output_txt, k):
     j = 0
     key = ''
     while i < len(all_str):
-        if all_str[i] in a:
+        if all_str[i] in Globals.a:
             key += k[j % len(k)]
             i += 1
             j += 1
-        elif all_str[i] not in a:
-            key += 'a'
+        elif all_str[i] not in Globals.a:
+            key += Globals.random_letter
             i += 1
 
     for line in text_list:
         line = line.lower()
         for i, l in enumerate(line):
-            if l not in a:
+            if l not in Globals.a:
                 working_line += l
             else:
-                working_line += a[(a.find(l) + a.find(key[i])) % len(a)]
+                working_line += Globals.a[
+                    (Globals.a.find(l) + Globals.a.find(key[i])) % len(
+                        Globals.a)]
         code_list.append(working_line)
         working_line = ''
     for line in code_list:
@@ -140,9 +156,14 @@ def vegenere_cipher(input_txt, output_txt, k):
 
 
 def de_vegenere_cipher(input_txt, output_txt, k):
-    """Функция, расшифровывающая шифр Виженера. На вход функции подается название файла, в котором лежит зашифрованный
-        текст, который должна расшифровать функция; название файла, в котором будет лежать расшифрованный текст и слово,
-        являющееся ключом шифрования """
+    '''
+    Функция, расшифровывающая шифр Виженера.
+    :param input_txt: название файла, в котором лежит зашифрованный текст,
+    который должна расшифровать функция
+    :param output_txt: название файла, в котором будет лежать расшифрованный
+    текст
+    :param k: слово, являющееся ключом шифрования
+    '''
 
     code = open(input_txt, 'r')
     text = open(output_txt, 'w')
@@ -151,8 +172,6 @@ def de_vegenere_cipher(input_txt, output_txt, k):
     working_line = ''
     text_list = []
     all_str = ''
-
-    a = 'abcdefghijklmnopqrstuvwxyz'
 
     k = k.lower()
 
@@ -166,21 +185,23 @@ def de_vegenere_cipher(input_txt, output_txt, k):
     j = 0
     key = ''
     while i < len(all_str):
-        if all_str[i] in a:
+        if all_str[i] in Globals.a:
             key += k[j % len(k)]
             i += 1
             j += 1
-        elif all_str[i] not in a:
-            key += 'a'
+        elif all_str[i] not in Globals.a:
+            key += Globals.random_letter
             i += 1
 
     for line in code_list:
         line = line.lower()
         for i, l in enumerate(line):
-            if l not in a:
+            if l not in Globals.a:
                 working_line += l
             else:
-                working_line += a[(a.find(l) - a.find(key[i])) % len(a)]
+                working_line += Globals.a[
+                    (Globals.a.find(l) - Globals.a.find(key[i])) % len(
+                        Globals.a)]
         text_list.append(working_line)
         working_line = ''
     for line in text_list:
@@ -191,9 +212,14 @@ def de_vegenere_cipher(input_txt, output_txt, k):
 
 
 def vernam_cipher(input_txt, output_txt, k):
-    """Функция, создающая шифр Вернама. На вход функции подается название файла, в котором лежит текст,
-        который должна зашифровать функция; название файла, в котором будет лежать зашифрованный текст и слово,
-        являющееся ключом шифрования"""
+    '''
+    Функция, создающая шифр Вернама.
+    :param input_txt: название файла, в котором лежит текст, который должна
+    зашифровать функция
+    :param output_txt: название файла, в котором будет лежать зашифрованный
+    текст
+    :param k: слово, являющееся ключом шифрования
+    '''
 
     text = open(input_txt, 'r')
     code = open(output_txt, 'w')
@@ -202,8 +228,6 @@ def vernam_cipher(input_txt, output_txt, k):
     working_line = ''
     code_list = []
     all_str = ''
-
-    a = 'abcdefghijklmnopqrstuvwxyz'
 
     k = k.lower()
 
@@ -218,20 +242,22 @@ def vernam_cipher(input_txt, output_txt, k):
     j = 0
     key = ''
     while i < len(all_str):
-        if all_str[i] in a:
-            key += k[j]
+        if all_str[i] in Globals.a:
+            key += k[j % len(k)]
             i += 1
             j += 1
-        elif all_str[i] not in a:
-            key += 'a'
+        elif all_str[i] not in Globals.a:
+            key += Globals.random_letter
             i += 1
     for line in text_list:
         line = line.lower()
         for i, l in enumerate(line):
-            if l not in a:
+            if l not in Globals.a:
                 working_line += l
             else:
-                working_line += a[(a.find(l) + a.find(key[i])) % len(a)]
+                working_line += Globals.a[
+                    (Globals.a.find(l) + Globals.a.find(key[i])) % len(
+                        Globals.a)]
         code_list.append(working_line)
         working_line = ''
     for line in code_list:
@@ -242,9 +268,14 @@ def vernam_cipher(input_txt, output_txt, k):
 
 
 def de_vernam_cipher(input_txt, output_txt, k):
-    """Функция, расшифровывающая шифр Вернама. На вход функции подается название файла, в котором лежит зашифрованный
-        текст, который должна расшифровать функция; название файла, в котором будет лежать расшифрованный текст и
-        слово, являющееся ключом шифрования """
+    '''
+    Функция, расшифровывающая шифр Вернама.
+    :param input_txt: название файла, в котором лежит зашифрованный текст,
+    который должна расшифровать функция
+    :param output_txt: название файла, в котором будет лежать расшифрованный
+    текст
+    :param k: слово, являющееся ключом шифрования
+    '''
 
     code = open(input_txt, 'r')
     text = open(output_txt, 'w')
@@ -253,8 +284,6 @@ def de_vernam_cipher(input_txt, output_txt, k):
     working_line = ''
     text_list = []
     all_str = ''
-
-    a = 'abcdefghijklmnopqrstuvwxyz'
 
     k = k.lower()
 
@@ -269,20 +298,22 @@ def de_vernam_cipher(input_txt, output_txt, k):
     j = 0
     key = ''
     while i < len(all_str):
-        if all_str[i] in a:
+        if all_str[i] in Globals.a:
             key += k[j]
             i += 1
             j += 1
-        elif all_str[i] not in a:
-            key += 'a'
+        elif all_str[i] not in Globals.a:
+            key += Globals.random_letter
             i += 1
     for line in code_list:
         line = line.lower()
         for i, l in enumerate(line):
-            if l not in a:
+            if l not in Globals.a:
                 working_line += l
             else:
-                working_line += a[(a.find(l) - a.find(key[i])) % len(a)]
+                working_line += Globals.a[
+                    (Globals.a.find(l) - Globals.a.find(key[i])) % len(
+                        Globals.a)]
         text_list.append(working_line)
         working_line = ''
     for line in text_list:
@@ -293,13 +324,13 @@ def de_vernam_cipher(input_txt, output_txt, k):
 
 
 def morse_code(input_txt, output_txt):
-    """Функция, зашифровывающая текст азбукой Морзе. На вход функции подается название файла, в котором лежит текст,
-        который должна зашифровать функция и название файла, в котором будет лежать зашифрованный текст"""
-
-    morse = {'a': '•—', 'b': '—•••', 'c': '—•—•', 'd': '—••', 'e': '•', 'f': '••—•', 'g': '——•', 'h': '••••', 'i': '••',
-             'j': '•———', 'k': '—•—', 'l': '•—••', 'm': '——', 'n': '—•', 'o': '———', 'p': '•——•', 'q': '——•—',
-             'r': '•—•', 's': '•••', 't': '—', 'u': '••—', 'v': '•••—', 'w': '•——', 'x': '—••—', 'y': '—•——',
-             'z': '——••'}
+    '''
+    Функция, зашифровывающая текст азбукой Морзе.
+    :param input_txt: название файла, в котором лежит текст, который должна
+    зашифровать функция
+    :param output_txt: название файла, в котором будет лежать зашифрованный
+    текст
+    '''
 
     text = open(input_txt, 'r')
     code = open(output_txt, 'w')
@@ -311,10 +342,10 @@ def morse_code(input_txt, output_txt):
     for line in text_list:
         line = line.lower()
         for l in line:
-            if l not in morse.keys():
+            if l not in Globals.morse.keys():
                 working_line += l
             else:
-                working_line = working_line + morse[l] + ' '
+                working_line = working_line + Globals.morse[l] + ' '
         code_list.append(working_line)
         working_line = ''
     for line in code_list:
@@ -325,17 +356,17 @@ def morse_code(input_txt, output_txt):
 
 
 def de_morse_code(input_txt, output_txt):
-    """Функция, расфровывающая текст азбукой Морзе. На вход функции подается название файла, в котором лежит
-        зашифрованный текст, который должна расшифровать функция и название файла, в котором будет лежать
-        расшифрованный текст"""
+    '''
+    Функция, расфровывающая текст азбукой Морзе.
+    :param input_txt: название файла, в котором лежит зашифрованный текст,
+    который должна расшифровать функция
+    :param output_txt: название файла, в котором будет лежать расшифрованный
+    текст
+    '''
 
-    morse = {'a': '•—', 'b': '—•••', 'c': '—•—•', 'd': '—••', 'e': '•', 'f': '••—•', 'g': '——•', 'h': '••••', 'i': '••',
-             'j': '•———', 'k': '—•—', 'l': '•—••', 'm': '——', 'n': '—•', 'o': '———', 'p': '•——•', 'q': '——•—',
-             'r': '•—•', 's': '•••', 't': '—', 'u': '••—', 'v': '•••—', 'w': '•——', 'x': '—••—', 'y': '—•——',
-             'z': '——••'}
     reversed_morse = {}
 
-    for key, value in morse.items():
+    for key, value in Globals.morse.items():
         reversed_morse[value] = key
 
     code = open(input_txt, 'r')
