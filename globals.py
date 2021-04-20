@@ -1,5 +1,8 @@
+import string
+
+
 class Globals:
-    a = 'abcdefghijklmnopqrstuvwxyz'
+    alphabet = string.ascii_lowercase
     morse = {'a': '•—', 'b': '—•••', 'c': '—•—•', 'd': '—••', 'e': '•',
              'f': '••—•', 'g': '——•', 'h': '••••', 'i': '••',
              'j': '•———', 'k': '—•—', 'l': '•—••', 'm': '——', 'n': '—•',
