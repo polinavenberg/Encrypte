@@ -20,39 +20,35 @@ def encrypt(text, start_image, final_image):
     if text_len >= img_len * Globals.degree / 8 - Globals.BMP_HEADER_SIZE:
         print('Too long text')
         return
-    text = open(text, 'r')
-    start_bmp = open(start_image, 'rb')
-    final_bmp = open(final_image, 'wb')
+    with open(text, 'r') as text, open(start_image, 'rb') as start_bmp, open(
+            final_image, 'wb') as final_bmp:
 
-    final_bmp.write(start_bmp.read(Globals.BMP_HEADER_SIZE))
-    text_mask, img_mask = create_masks(Globals.degree)
+        final_bmp.write(start_bmp.read(Globals.BMP_HEADER_SIZE))
+        text_mask, img_mask = create_masks(Globals.degree)
 
-    while True:
-        symbol = text.read(1)
-        if not symbol:
-            last_byte = 0b00000000
+        while True:
+            symbol = text.read(1)
+            if not symbol:
+                last_byte = 0b00000000
+                for byte_amount in range(0, 8, Globals.degree):
+                    img_byte = int.from_bytes(start_bmp.read(1),
+                                              sys.byteorder) & img_mask
+                    bits = last_byte & text_mask
+                    bits >>= (8 - Globals.degree)
+                    img_byte |= bits
+                    final_bmp.write(img_byte.to_bytes(1, sys.byteorder))
+                break
+            symbol = ord(symbol)
             for byte_amount in range(0, 8, Globals.degree):
                 img_byte = int.from_bytes(start_bmp.read(1),
                                           sys.byteorder) & img_mask
-                bits = last_byte & text_mask
+                bits = symbol & text_mask
                 bits >>= (8 - Globals.degree)
                 img_byte |= bits
                 final_bmp.write(img_byte.to_bytes(1, sys.byteorder))
-            break
-        symbol = ord(symbol)
-        for byte_amount in range(0, 8, Globals.degree):
-            img_byte = int.from_bytes(start_bmp.read(1),
-                                      sys.byteorder) & img_mask
-            bits = symbol & text_mask
-            bits >>= (8 - Globals.degree)
-            img_byte |= bits
-            final_bmp.write(img_byte.to_bytes(1, sys.byteorder))
-            symbol <<= Globals.degree
-    final_bmp.write(start_bmp.read())
+                symbol <<= Globals.degree
+        final_bmp.write(start_bmp.read())
 
-    text.close()
-    start_bmp.close()
-    final_bmp.close()
     return True
 
 
@@ -66,34 +62,32 @@ def decrypt(start_image, output_text):
     расшифрованный текст в формате 'text.txt'
     '''
 
-    text = open(output_text, 'w', encoding='utf-8')
-    encoded_bmp = open(start_image, 'rb')
+    with open(output_text, 'w', encoding='utf-8') as text, open(
+            start_image, 'rb') as encoded_bmp:
 
-    encoded_bmp.seek(Globals.BMP_HEADER_SIZE)
+        encoded_bmp.seek(Globals.BMP_HEADER_SIZE)
 
-    text_mask, img_mask = create_masks(Globals.degree)
-    img_mask = ~img_mask
+        text_mask, img_mask = create_masks(Globals.degree)
+        img_mask = ~img_mask
 
-    read = 0
-    while True:
-        symbol = 0
+        read = 0
+        while True:
+            symbol = 0
 
-        for bits_read in range(0, 8, Globals.degree):
-            img_byte = int.from_bytes(encoded_bmp.read(1),
-                                      sys.byteorder) & img_mask
-            symbol <<= Globals.degree
-            symbol |= img_byte
+            for bits_read in range(0, 8, Globals.degree):
+                img_byte = int.from_bytes(encoded_bmp.read(1),
+                                          sys.byteorder) & img_mask
+                symbol <<= Globals.degree
+                symbol |= img_byte
 
-        if chr(symbol) == '\n' and len(os.linesep) == 2:
+            if chr(symbol) == '\n' and len(os.linesep) == 2:
+                read += 1
+
             read += 1
+            if symbol == 0b00000000:
+                break
+            text.write(chr(symbol))
 
-        read += 1
-        if symbol == 0b00000000:
-            break
-        text.write(chr(symbol))
-
-    text.close()
-    encoded_bmp.close()
     return True
 
 
