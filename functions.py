@@ -2,16 +2,20 @@ import collections
 from globals import Globals
 
 
-def caesar_cipher(input_txt, output_txt, step):
+def caesar_cipher(input_txt, output_txt, step, choice):
     '''
-    Функция, зашифровывающая текст с помощью шифра Цезаря.
+    Функция, зашифровывающая и расшифровывающая текст с помощью шифра Цезаря.
     :param input_txt: название файла, в котором лежит текст, который должна
     зашифровать функция
     :param output_txt: название файла, в котором будет лежать зашифрованный
     текст
+    :param choice: зашифровать или расшифровать текст
     :param step: число, являющееся шагом шифрования
     '''
-
+    if choice == 'Encode':
+        choice = 1
+    elif choice == 'Decode':
+        choice = -1
     with open(input_txt, 'r') as text, open(output_txt, 'w') as code:
         text_list = text.readlines()
         working_line = ''
@@ -24,43 +28,13 @@ def caesar_cipher(input_txt, output_txt, step):
                     working_line += symbol
                 else:
                     working_line += Globals.alphabet[
-                        (Globals.alphabet.find(symbol) + step) % len(
+                        (Globals.alphabet.find(symbol) + step * choice) % len(
                             Globals.alphabet)]
             code_list.append(working_line)
             working_line = ''
         for line in code_list:
             code.write(line)
     return code
-
-
-def de_caesar_cipher(input_txt, output_txt, step):
-    '''
-    Функция, расшифровывающая шифр Цезаря.
-    :param input_txt: название файла, в котором лежит зашифрованный текст
-    :param output_txt: название файла, в котором будет лежать расшифрованный
-    текст
-    :param step: число, являющееся шагом шифрования
-    '''
-
-    with open(input_txt, 'r') as code, open(output_txt, 'w') as text:
-        code_list = code.readlines()
-        working_line = ''
-        text_list = []
-
-        for line in code_list:
-            line = line.lower()
-            for symbol in line:
-                if symbol not in Globals.alphabet:
-                    working_line += symbol
-                else:
-                    working_line += Globals.alphabet[
-                        (Globals.alphabet.find(symbol) - step) % len(
-                            Globals.alphabet)]
-            text_list.append(working_line)
-            working_line = ''
-        for line in text_list:
-            text.write(line)
-    return text
 
 
 def caesar_analysys(input_txt, output_txt):
@@ -90,7 +64,7 @@ def caesar_analysys(input_txt, output_txt):
             most_common_element) - Globals.alphabet.find(
             Globals.most_common_letter)
 
-    return de_caesar_cipher(input_txt, output_txt, key)
+    return caesar_cipher(input_txt, output_txt, key, 'Decode')
 
 
 def vegenere_cipher(input_txt, output_txt, k):

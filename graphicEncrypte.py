@@ -2,9 +2,9 @@ import tkinter
 from tkinter import ttk, messagebox, filedialog
 from tkinter.ttk import Combobox
 import winsound
-from functions import caesar_analysys, caesar_cipher, de_caesar_cipher, \
-    de_morse_code, de_vegenere_cipher, de_vernam_cipher, morse_code, \
-    vegenere_cipher, vernam_cipher
+from functions import caesar_cipher, morse_code, vegenere_cipher, vernam_cipher
+from functions import de_morse_code, de_vegenere_cipher, de_vernam_cipher
+from functions import caesar_analysys
 from stegan import encrypt, decrypt
 
 '''add1 - add6 - функции для кнопок добавления файлов'''
@@ -52,9 +52,9 @@ def caesar_crypt():
     output_text = output_filename_1.get()
     key = int(step_value_1.get())
     if choice == 'Encode':
-        caesar_cipher(input_text, output_text, key)
+        caesar_cipher(input_text, output_text, key, choice)
     elif choice == 'Decode':
-        de_caesar_cipher(input_text, output_text, key)
+        caesar_cipher(input_text, output_text, key, choice)
     elif choice == 'Crack':
         caesar_analysys(input_text, output_text)
     else:
@@ -136,7 +136,7 @@ def update(ind):
 window = tkinter.Tk()
 window.title('Encrypte')
 w = window.winfo_screenwidth() // 2 - 340
-h = window.winfo_screenheight() // 2 -260
+h = window.winfo_screenheight() // 2 - 260
 window.geometry('700x450+{}+{}'.format(w, h))
 window.resizable(False, False)
 
@@ -152,7 +152,7 @@ tab_control.pack(expand=1, fill='both')
 
 text_about_input_1 = tkinter.Label(tab1, text='Choose the input file')
 text_about_input_1.grid(column=0, row=0)
-button_to_choose_input_file_1 = tkinter.Button(tab1, text="+", command=add1)
+button_to_choose_input_file_1 = tkinter.Button(tab1, text='+', command=add1)
 button_to_choose_input_file_1.grid(column=0, row=1)
 text_filename_1 = tkinter.Label(tab1, text='')
 text_filename_1.grid(column=0, row=2)
@@ -299,7 +299,7 @@ text_step_5 = tkinter.Label(tab5, text='Choose the text file')
 text_step_5.grid(column=1, row=4)
 button_to_choose_input_file_5 = tkinter.Button(tab5, text='+', command=add6)
 button_to_choose_input_file_5.grid(column=1, row=5)
-text_filename_5 = tkinter.Label(tab5, text="")
+text_filename_5 = tkinter.Label(tab5, text='')
 text_filename_5.grid(column=1, row=6)
 
 button_to_start_5 = tkinter.Button(tab5, text='Encrypte',
@@ -311,6 +311,7 @@ label_5.grid(column=0, row=10, columnspan=2)
 tab5.after(0, update, 0)
 
 winsound.PlaySound('posmertiye.wav',
-                   winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+                   winsound.SND_FILENAME |
+                   winsound.SND_ASYNC | winsound.SND_LOOP)
 
 window.mainloop()
