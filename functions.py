@@ -12,10 +12,10 @@ def caesar_cipher(input_txt, output_txt, step, choice):
     :param choice: зашифровать или расшифровать текст
     :param step: число, являющееся шагом шифрования
     '''
-    if choice == 'Encode':
-        choice = 1
-    elif choice == 'Decode':
-        choice = -1
+    if choice == 'Encrypt':
+        choice = Globals.forward_step
+    elif choice == 'Decrypt':
+        choice = Globals.back_step
     with open(input_txt, 'r') as text, open(output_txt, 'w') as code:
         text_list = text.readlines()
         working_line = ''

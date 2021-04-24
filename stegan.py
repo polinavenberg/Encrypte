@@ -15,9 +15,9 @@ def encrypt(text, start_image, final_image):
     'final_image.bmp'
     '''
 
-    text_len = os.stat('text.txt').st_size
-    img_len = os.stat('start.bmp').st_size
-    if text_len >= img_len * Globals.degree / 8 - Globals.BMP_HEADER_SIZE:
+    text_len = os.stat(text).st_size
+    img_len = os.stat(start_image).st_size
+    if text_len >= img_len * Globals.degree / Globals.bits - Globals.BMP_HEADER_SIZE:
         print('Too long text')
         return
     with open(text, 'r') as text, open(start_image, 'rb') as start_bmp, open(
@@ -27,25 +27,24 @@ def encrypt(text, start_image, final_image):
         text_mask, img_mask = create_masks(Globals.degree)
 
         while True:
-            symbol = text.read(1)
+            symbol = text.read(Globals.step)
             if not symbol:
-                last_byte = 0b00000000
-                for byte_amount in range(0, 8, Globals.degree):
-                    img_byte = int.from_bytes(start_bmp.read(1),
+                for byte_amount in range(Globals.first_bit, Globals.last_bit, Globals.degree):
+                    img_byte = int.from_bytes(start_bmp.read(Globals.step),
                                               sys.byteorder) & img_mask
-                    bits = last_byte & text_mask
-                    bits >>= (8 - Globals.degree)
+                    bits = Globals.last_byte & text_mask
+                    bits >>= (Globals.bits - Globals.degree)
                     img_byte |= bits
-                    final_bmp.write(img_byte.to_bytes(1, sys.byteorder))
+                    final_bmp.write(img_byte.to_bytes(Globals.step, sys.byteorder))
                 break
             symbol = ord(symbol)
-            for byte_amount in range(0, 8, Globals.degree):
-                img_byte = int.from_bytes(start_bmp.read(1),
+            for byte_amount in range(Globals.first_bit, Globals.last_bit, Globals.degree):
+                img_byte = int.from_bytes(start_bmp.read(Globals.step),
                                           sys.byteorder) & img_mask
                 bits = symbol & text_mask
-                bits >>= (8 - Globals.degree)
+                bits >>= (Globals.bits - Globals.degree)
                 img_byte |= bits
-                final_bmp.write(img_byte.to_bytes(1, sys.byteorder))
+                final_bmp.write(img_byte.to_bytes(Globals.step, sys.byteorder))
                 symbol <<= Globals.degree
         final_bmp.write(start_bmp.read())
 
@@ -70,21 +69,21 @@ def decrypt(start_image, output_text):
         text_mask, img_mask = create_masks(Globals.degree)
         img_mask = ~img_mask
 
-        read = 0
+        read = Globals.empty_value
         while True:
-            symbol = 0
+            symbol = Globals.empty_value
 
-            for bits_read in range(0, 8, Globals.degree):
-                img_byte = int.from_bytes(encoded_bmp.read(1),
+            for bits_read in range(Globals.first_bit, Globals.last_bit, Globals.degree):
+                img_byte = int.from_bytes(encoded_bmp.read(Globals.step),
                                           sys.byteorder) & img_mask
                 symbol <<= Globals.degree
                 symbol |= img_byte
 
-            if chr(symbol) == '\n' and len(os.linesep) == 2:
-                read += 1
+            if chr(symbol) == '\n' and len(os.linesep) == Globals.degree:
+                read += Globals.step
 
-            read += 1
-            if symbol == 0b00000000:
+            read += Globals.step
+            if symbol == Globals.last_byte:
                 break
             text.write(chr(symbol))
 
@@ -93,12 +92,10 @@ def decrypt(start_image, output_text):
 
 def create_masks(degree):
     '''Функция, которая создает маски для байтов текста и изображения'''
-    text_mask = 0b11111111
-    img_mask = 0b11111111
 
-    text_mask <<= (8 - degree)
-    text_mask %= 256
-    img_mask >>= degree
-    img_mask <<= degree
+    Globals.text_mask <<= (Globals.bits - degree)
+    Globals.text_mask %= Globals.number_of_bits
+    Globals.img_mask >>= degree
+    Globals.img_mask <<= degree
 
-    return text_mask, img_mask
+    return Globals.text_mask, Globals.img_mask
