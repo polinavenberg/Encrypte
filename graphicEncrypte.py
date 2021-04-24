@@ -1,3 +1,4 @@
+from globals import Globals
 import tkinter
 from tkinter import ttk, messagebox, filedialog
 from tkinter.ttk import Combobox
@@ -57,8 +58,6 @@ def caesar_crypt():
         caesar_cipher(input_text, output_text, key, choice)
     elif choice == 'Crack':
         caesar_analysys(input_text, output_text)
-    else:
-        pass
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -71,8 +70,6 @@ def vernam_crypt():
         vernam_cipher(input_text, output_text, key)
     elif choice == 'Decode':
         de_vernam_cipher(input_text, output_text, key)
-    else:
-        pass
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -85,8 +82,6 @@ def vegenere_crypt():
         vegenere_cipher(input_text, output_text, key)
     elif choice == 'Decode':
         de_vegenere_cipher(input_text, output_text, key)
-    else:
-        pass
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -98,8 +93,6 @@ def morse_crypt():
         morse_code(input_text, output_text)
     elif choice == 'Decode':
         de_morse_code(input_text, output_text)
-    else:
-        pass
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -113,8 +106,6 @@ def steganography_crypt():
         encrypt(input_text, input_img, output_name)
     elif choice == 'Decode':
         decrypt(input_img, output_name)
-    else:
-        pass
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -135,12 +126,12 @@ def update(ind):
 # создаем окно
 window = tkinter.Tk()
 window.title('Encrypte')
-w = window.winfo_screenwidth() // 2 - 340
-h = window.winfo_screenheight() // 2 - 260
+w = window.winfo_screenwidth() // Globals.divide_by_two - Globals.to_window_center_width
+h = window.winfo_screenheight() // Globals.divide_by_two - Globals.to_window_center_high
 window.geometry('700x450+{}+{}'.format(w, h))
 window.resizable(False, False)
 
-frames = [tkinter.PhotoImage(file=f'eyes//e{i}.png') for i in range(1, 9)]
+frames = [tkinter.PhotoImage(file=f'eyes_sprites//e{i}.png') for i in range(1, 9)]
 
 # создаем вкладки
 tab_control = ttk.Notebook(window)
@@ -310,7 +301,7 @@ label_5 = tkinter.Label(tab5)
 label_5.grid(column=0, row=10, columnspan=2)
 tab5.after(0, update, 0)
 
-winsound.PlaySound('posmertiye.wav',
+winsound.PlaySound('sound_file//posmertiye.wav',
                    winsound.SND_FILENAME |
                    winsound.SND_ASYNC | winsound.SND_LOOP)
 
