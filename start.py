@@ -1,56 +1,68 @@
 from functions import caesar_cipher, morse_code, vegenere_cipher, vernam_cipher
-from functions import de_caesar_cipher, de_morse_code, de_vegenere_cipher, \
+from functions import de_morse_code, de_vegenere_cipher, \
     de_vernam_cipher
 from functions import caesar_analysys
+
+
+def caesar_cipher_work():
+    choice = input(
+        'en - encode, de - decode, cr - cracking a caesar cipher\n')
+    input_text = input('print the name of the file with your text\n')
+    output_text = input('print the name of the output file\n')
+    if choice == 'crack':
+        return caesar_analysys(input_text, output_text)
+    key = int(input('print the key(shift) for coding\n'))
+    if choice == 'en':
+        return caesar_cipher(input_text, output_text, key, 'Encrypt')
+    elif choice == 'de':
+        return caesar_cipher(input_text, output_text, key, 'Decrypt')
+
+
+def vegenere_cipher_work():
+    choice = input('en - encode, de - decode\n')
+    input_text = input('print the name of the file with your text\n')
+    output_text = input('print the name of the output file\n')
+    key = input('print the key word for coding\n')
+    if choice == 'en':
+        return vegenere_cipher(input_text, output_text, key)
+    elif choice == 'de':
+        return de_vegenere_cipher(input_text, output_text, key)
+
+
+def vernam_cipher_work():
+    choice = input('en - encode, de - decode\n')
+    input_text = input('print the name of the file with your text\n')
+    output_text = input('print the name of the output file \n')
+    key = input(
+        'print the key word for coding, it length must be the \
+        same as the length of the text\n')
+    if choice == 'en':
+        return vernam_cipher(input_text, output_text, key)
+    elif choice == 'de':
+        return de_vernam_cipher(input_text, output_text, key)
+
+
+def morse_code_work():
+    choice = input('en - encode, de - decode\n')
+    input_text = input('print the name of the file with your text\n')
+    output_text = input('print the name of the output file \n')
+    if choice == 'en':
+        return morse_code(input_text, output_text)
+    elif choice == 'de':
+        return de_morse_code(input_text, output_text)
+
+
+choice_dict = {'caesar': caesar_cipher_work,
+               'vegenere': vegenere_cipher_work,
+               'vernam': vernam_cipher_work, 'morse': morse_code_work}
 
 
 def start():
     '''Функция запускает консольную версию программы и ожидает ввод всех
     необходимых параметров'''
     while True:
-        choice = input(
-            'en - encode, de - decode, br - breaking a caesar cipher, \
-            q - quit\n')
-        if choice == 'q':
+        choice = input('caesar, vegenere, vernam, morse cipher or quit\n')
+        if choice == 'quit':
             break
-        elif choice == 'br':
-            input_text = input('print the name of the file with your text\n')
-            output_text = input(
-                'print the name of the output file\n')
-            caesar_analysys(input_text, output_text)
-        else:
-            cipher = input('caesar, vegenere, vernam or morse cipher\n')
-            input_text = input('print the name of the file with your text\n')
-            output_text = input(
-                'print the name of the output file \n')
-
-            if cipher == 'caesar':
-                key = int(input('print the key(shift) for coding\n'))
-                if choice == 'en':
-                    caesar_cipher(input_text, output_text, key, 'Encrypt')
-                elif choice == 'de':
-                    caesar_cipher(input_text, output_text, key, 'Decrypt')
-
-            elif cipher == 'vegenere':
-                key = input('print the key word for coding\n')
-                if choice == 'en':
-                    vegenere_cipher(input_text, output_text, key)
-                elif choice == 'de':
-                    de_vegenere_cipher(input_text, output_text, key)
-
-            elif cipher == 'vernam':
-                key = input(
-                    'print the key word for coding, it length must be the \
-                    same as the length of the text\n')
-                if choice == 'en':
-                    vernam_cipher(input_text, output_text, key)
-                elif choice == 'de':
-                    de_vernam_cipher(input_text, output_text, key)
-
-            elif cipher == 'morse':
-                if choice == 'en':
-                    morse_code(input_text, output_text)
-                elif choice == 'de':
-                    de_morse_code(input_text, output_text)
-            else:
-                print('Unknown command')
+        global choice_dict
+        choice_dict[choice]()
