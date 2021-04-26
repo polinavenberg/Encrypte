@@ -3,14 +3,14 @@
 <p>Encrypte - программа для шифрования и дешифрования текста</p>
 </blockquote>
 <h1 id="-">Как запустить:</h1>
-<details><summary><h3 id="-python-"><strong>Первый этап: установка python и нужных библиотек</strong></h3>
-<h5 id="-python3-pygame-">Если у вас уже установлен python3 и вы можете самостоятельно установить библиотеки tkinter и string — пропустите этот этап</h5></summary>
+<h3 id="-python-"><strong>Первый этап: установка python и нужных библиотек</strong></h3>
+<details><summary><h5 id="-python3-pygame-">Если у вас уже установлен python3 и вы можете самостоятельно установить библиотеки tkinter и string — пропустите этот этап</h5></summary>
 <p><strong>1. Скачайте python3 с официального <a href="https://www.python.org/downloads/">сайта</a> и установите его.</strong> 
-<p><strong>2. Во время установки <em>обязательно</em> поставьте галочку "Add Python 3.x to PATH".</strong></p> <p><img src="https://python-scripts.com/wp-content/uploads/2018/06/win-install-dialog.40e3ded144b0.png" alt="add path screenshot"></p>
+<p><strong>2. Во время установки <em>обязательно</em> поставьте галочку "Add Python 3.x to PATH".</strong></p>
 <p><strong>3. Запустите консоль Windows любым удобным для вас способом (например набрав в поиске приложений cmd)</strong></p>
 <p><strong>4. Установите нужные библиотеки используя команды</strong></p>
 <blockquote>
-<p>pip install T</p>
+<p>pip install tkinter</p>
 </blockquote>
 </details>
 <h3 id="-"><strong>Второй этап: запуск программы</strong></h3>
