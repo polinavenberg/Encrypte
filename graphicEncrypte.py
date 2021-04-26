@@ -41,9 +41,9 @@ def add6():
     text_filename_5.configure(text=input_file)
 
 
-'''Функции, которые выполняется при нажатии кнопки, которая запускает 
-    процесс шифрования или дешифрования с использованием определенного шифра. 
-    Они считывают введенные данные и исходя из них запускают необходимые 
+'''Функции, которые выполняется при нажатии кнопки, которая запускает
+    процесс шифрования или дешифрования с использованием определенного шифра.
+    Они считывают введенные данные и исходя из них запускают необходимые
     функции'''
 
 
@@ -121,7 +121,8 @@ window = tkinter.Tk()
 window.title('Encrypte')
 w = window.winfo_screenwidth() // Globals.divide_by_two - Globals.to_window_center_width
 h = window.winfo_screenheight() // Globals.divide_by_two - Globals.to_window_center_high
-window.geometry('{}x{}+{}+{}'.format(Globals.window_width, Globals.window_height, w, h))
+window.geometry(
+    '{}x{}+{}+{}'.format(Globals.window_width, Globals.window_height, w, h))
 window.resizable(False, False)
 
 frames = [tkinter.PhotoImage(file=f'eyes_sprites//e{i}.png') for i in
