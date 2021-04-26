@@ -3,8 +3,8 @@
 <p>Encrypte - программа для шифрования и дешифрования текста</p>
 </blockquote>
 <h1 id="-">Как запустить:</h1>
-<details><summary><h3 id="-python-"><strong>Первый этап: установка python и нужных библиотек</strong></h3></summary>
-<h5 id="-python3-pygame-">Если у вас уже установлен python3 и вы можете самостоятельно установить библиотеки tkinter и string — пропустите этот этап</h5>
+<h3 id="-python-"><strong>Первый этап: установка python и нужных библиотек</strong></h3>
+<details><summary><id="-python3-pygame-">Если у вас уже установлен python3 и вы можете самостоятельно установить библиотеки tkinter и string — пропустите этот этап</summary>
 <p><strong>1. Скачайте python3 с официального <a href="https://www.python.org/downloads/">сайта</a> и установите его.</strong> 
 <p><strong>2. Во время установки <em>обязательно</em> поставьте галочку "Add Python 3.x to PATH".</strong></p>
 <p><strong>3. Запустите консоль Windows любым удобным для вас способом (например набрав в поиске приложений cmd)</strong></p>
