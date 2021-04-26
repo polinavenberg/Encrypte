@@ -14,12 +14,16 @@ class Globals:
     most_common_letter = 'e'
     forward_step = 1
     back_step = -1
-    random_letter = 'a'
+    random_letter = 'b'
     BMP_HEADER_SIZE = 54
 
     divide_by_two = 2
     to_window_center_width = 340
     to_window_center_high = 260
+    window_width = 700
+    window_height = 450
+    first_image = 1
+    last_image = 9
 
     bits = 8
     last_byte = 0b00000000
@@ -30,3 +34,6 @@ class Globals:
     last_bit = 8
     empty_value = 0
     number_of_bits = 256
+
+    sprite_speed = 150
+    sprite_quantity = 8

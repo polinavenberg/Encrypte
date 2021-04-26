@@ -29,16 +29,19 @@ def encrypt(text, start_image, final_image):
         while True:
             symbol = text.read(Globals.step)
             if not symbol:
-                for byte_amount in range(Globals.first_bit, Globals.last_bit, Globals.degree):
+                for byte_amount in range(Globals.first_bit, Globals.last_bit,
+                                         Globals.degree):
                     img_byte = int.from_bytes(start_bmp.read(Globals.step),
                                               sys.byteorder) & img_mask
                     bits = Globals.last_byte & text_mask
                     bits >>= (Globals.bits - Globals.degree)
                     img_byte |= bits
-                    final_bmp.write(img_byte.to_bytes(Globals.step, sys.byteorder))
+                    final_bmp.write(
+                        img_byte.to_bytes(Globals.step, sys.byteorder))
                 break
             symbol = ord(symbol)
-            for byte_amount in range(Globals.first_bit, Globals.last_bit, Globals.degree):
+            for byte_amount in range(Globals.first_bit, Globals.last_bit,
+                                     Globals.degree):
                 img_byte = int.from_bytes(start_bmp.read(Globals.step),
                                           sys.byteorder) & img_mask
                 bits = symbol & text_mask
@@ -62,9 +65,9 @@ def decrypt(start_image, output_text):
     '''
 
     with open(output_text, 'w', encoding='utf-8') as text, open(
-            start_image, 'rb') as encoded_bmp:
+            start_image, 'rb') as Encryptd_bmp:
 
-        encoded_bmp.seek(Globals.BMP_HEADER_SIZE)
+        Encryptd_bmp.seek(Globals.BMP_HEADER_SIZE)
 
         text_mask, img_mask = create_masks(Globals.degree)
         img_mask = ~img_mask
@@ -73,8 +76,9 @@ def decrypt(start_image, output_text):
         while True:
             symbol = Globals.empty_value
 
-            for bits_read in range(Globals.first_bit, Globals.last_bit, Globals.degree):
-                img_byte = int.from_bytes(encoded_bmp.read(Globals.step),
+            for bits_read in range(Globals.first_bit, Globals.last_bit,
+                                   Globals.degree):
+                img_byte = int.from_bytes(Encryptd_bmp.read(Globals.step),
                                           sys.byteorder) & img_mask
                 symbol <<= Globals.degree
                 symbol |= img_byte

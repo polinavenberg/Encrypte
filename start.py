@@ -1,12 +1,11 @@
 from functions import caesar_cipher, morse_code, vegenere_cipher, vernam_cipher
-from functions import de_morse_code, de_vegenere_cipher, \
-    de_vernam_cipher
+from functions import de_morse_code
 from functions import caesar_analysys
 
 
 def caesar_cipher_work():
     choice = input(
-        'en - encode, de - decode, cr - cracking a caesar cipher\n')
+        'en - Encrypt, de - Decrypt, cr - cracking a caesar cipher\n')
     input_text = input('print the name of the file with your text\n')
     output_text = input('print the name of the output file\n')
     if choice == 'crack':
@@ -19,31 +18,31 @@ def caesar_cipher_work():
 
 
 def vegenere_cipher_work():
-    choice = input('en - encode, de - decode\n')
+    choice = input('en - Encrypt, de - Decrypt\n')
     input_text = input('print the name of the file with your text\n')
     output_text = input('print the name of the output file\n')
     key = input('print the key word for coding\n')
     if choice == 'en':
-        return vegenere_cipher(input_text, output_text, key)
+        return vegenere_cipher(input_text, output_text, key, 'Encrypt')
     elif choice == 'de':
-        return de_vegenere_cipher(input_text, output_text, key)
+        return vegenere_cipher(input_text, output_text, key, 'Decrypt')
 
 
 def vernam_cipher_work():
-    choice = input('en - encode, de - decode\n')
+    choice = input('en - Encrypt, de - Decrypt\n')
     input_text = input('print the name of the file with your text\n')
     output_text = input('print the name of the output file \n')
     key = input(
         'print the key word for coding, it length must be the \
         same as the length of the text\n')
     if choice == 'en':
-        return vernam_cipher(input_text, output_text, key)
+        return vernam_cipher(input_text, output_text, key, 'Encrypt')
     elif choice == 'de':
-        return de_vernam_cipher(input_text, output_text, key)
+        return vernam_cipher(input_text, output_text, key, 'Decrypt')
 
 
 def morse_code_work():
-    choice = input('en - encode, de - decode\n')
+    choice = input('en - Encrypt, de - Decrypt\n')
     input_text = input('print the name of the file with your text\n')
     output_text = input('print the name of the output file \n')
     if choice == 'en':

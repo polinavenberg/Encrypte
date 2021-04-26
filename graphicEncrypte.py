@@ -4,7 +4,7 @@ from tkinter import ttk, messagebox, filedialog
 from tkinter.ttk import Combobox
 import winsound
 from functions import caesar_cipher, morse_code, vegenere_cipher, vernam_cipher
-from functions import de_morse_code, de_vegenere_cipher, de_vernam_cipher
+from functions import de_morse_code
 from functions import caesar_analysys
 from stegan import encrypt, decrypt
 
@@ -52,12 +52,11 @@ def caesar_crypt():
     input_text = text_filename_1['text']
     output_text = output_filename_1.get()
     key = int(step_value_1.get())
-    if choice == 'Encode':
-        caesar_cipher(input_text, output_text, key, choice)
-    elif choice == 'Decode':
-        caesar_cipher(input_text, output_text, key, choice)
-    elif choice == 'Crack':
+    if choice == 'Crack':
         caesar_analysys(input_text, output_text)
+    else:
+        caesar_cipher(input_text, output_text, key, choice)
+
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -66,10 +65,7 @@ def vernam_crypt():
     input_text = text_filename_2['text']
     output_text = output_filename_2.get()
     key = key_value_2.get()
-    if choice == 'Encode':
-        vernam_cipher(input_text, output_text, key)
-    elif choice == 'Decode':
-        de_vernam_cipher(input_text, output_text, key)
+    vernam_cipher(input_text, output_text, key, choice)
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -78,10 +74,7 @@ def vegenere_crypt():
     input_text = text_filename_3['text']
     output_text = output_filename_3.get()
     key = key_value_3.get()
-    if choice == 'Encode':
-        vegenere_cipher(input_text, output_text, key)
-    elif choice == 'Decode':
-        de_vegenere_cipher(input_text, output_text, key)
+    vegenere_cipher(input_text, output_text, key, choice)
     messagebox.showinfo('Encrypte', 'Done!')
 
 
@@ -89,9 +82,9 @@ def morse_crypt():
     choice = choice_4.get()
     input_text = text_filename_4['text']
     output_text = output_filename_4.get()
-    if choice == 'Encode':
+    if choice == 'Encrypt':
         morse_code(input_text, output_text)
-    elif choice == 'Decode':
+    elif choice == 'Decrypt':
         de_morse_code(input_text, output_text)
     messagebox.showinfo('Encrypte', 'Done!')
 
@@ -102,9 +95,9 @@ def steganography_crypt():
     input_text = text_filename_5['text']
     output_name = output_filename_5.get()
 
-    if choice == 'Encode':
+    if choice == 'Encrypt':
         encrypt(input_text, input_img, output_name)
-    elif choice == 'Decode':
+    elif choice == 'Decrypt':
         decrypt(input_img, output_name)
     messagebox.showinfo('Encrypte', 'Done!')
 
@@ -113,14 +106,14 @@ def steganography_crypt():
 
 
 def update(ind):
-    frame = frames[ind % 8]
-    ind += 1
+    frame = frames[ind % Globals.sprite_quantity]
+    ind += Globals.step
     label_1.configure(image=frame)
     label_2.configure(image=frame)
     label_3.configure(image=frame)
     label_4.configure(image=frame)
     label_5.configure(image=frame)
-    tab1.after(150, update, ind)
+    tab1.after(Globals.sprite_speed, update, ind)
 
 
 # создаем окно
@@ -128,10 +121,11 @@ window = tkinter.Tk()
 window.title('Encrypte')
 w = window.winfo_screenwidth() // Globals.divide_by_two - Globals.to_window_center_width
 h = window.winfo_screenheight() // Globals.divide_by_two - Globals.to_window_center_high
-window.geometry('700x450+{}+{}'.format(w, h))
+window.geometry('{}x{}+{}+{}'.format(Globals.window_width, Globals.window_height, w, h))
 window.resizable(False, False)
 
-frames = [tkinter.PhotoImage(file=f'eyes_sprites//e{i}.png') for i in range(1, 9)]
+frames = [tkinter.PhotoImage(file=f'eyes_sprites//e{i}.png') for i in
+          range(Globals.first_image, Globals.last_image)]
 
 # создаем вкладки
 tab_control = ttk.Notebook(window)
@@ -154,7 +148,7 @@ output_filename_1 = tkinter.Entry(tab1, width=15)
 output_filename_1.grid(column=1, row=1)
 
 choice_1 = Combobox(tab1)
-choice_1['values'] = ('Encode', 'Decode', 'Crack')
+choice_1['values'] = ('Encrypt', 'Decrypt', 'Crack')
 choice_1.grid(column=0, row=5)
 
 text_step_1 = tkinter.Label(tab1, text='Print step or 0 if you want to crack')
@@ -187,7 +181,7 @@ output_filename_2 = tkinter.Entry(tab2, width=15)
 output_filename_2.grid(column=1, row=1)
 
 choice_2 = Combobox(tab2)
-choice_2['values'] = ('Encode', 'Decode')
+choice_2['values'] = ('Encrypt', 'Decrypt')
 choice_2.grid(column=0, row=5)
 
 text_step_2 = tkinter.Label(tab2, text='Print the key word')
@@ -221,7 +215,7 @@ output_filename_3 = tkinter.Entry(tab3, width=15)
 output_filename_3.grid(column=1, row=1)
 
 choice_3 = Combobox(tab3)
-choice_3['values'] = ('Encode', 'Decode')
+choice_3['values'] = ('Encrypt', 'Decrypt')
 choice_3.grid(column=0, row=5)
 
 text_step_3 = tkinter.Label(tab3, text='Print the key word')
@@ -255,7 +249,7 @@ output_filename_4 = tkinter.Entry(tab4, width=15)
 output_filename_4.grid(column=1, row=1)
 
 choice_4 = Combobox(tab4)
-choice_4['values'] = ('Encode', 'Decode')
+choice_4['values'] = ('Encrypt', 'Decrypt')
 choice_4.grid(column=0, row=5)
 
 button_to_start_4 = tkinter.Button(tab4, text='Encrypte', command=morse_crypt)
@@ -283,7 +277,7 @@ output_filename_5 = tkinter.Entry(tab5, width=15)
 output_filename_5.grid(column=1, row=1)
 
 choice_5 = Combobox(tab5)
-choice_5['values'] = ('Encode', 'Decode')
+choice_5['values'] = ('Encrypt', 'Decrypt')
 choice_5.grid(column=0, row=5)
 
 text_step_5 = tkinter.Label(tab5, text='Choose the text file')
